@@ -2,9 +2,9 @@ require "rack-ip-whitelist/version"
 
 module Rack
   class IpWhitelist
-    def initialize(app, addresses)
+    def initialize(app, addresses=nil)
       @app = app
-      @ip_addresses = addresses
+      @ip_addresses = addresses||ENV['WHITELISTED_IPS']||[]
     end
 
     def call(env)
