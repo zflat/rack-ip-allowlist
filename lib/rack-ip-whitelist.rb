@@ -4,7 +4,8 @@ module Rack
   class IpWhitelist
     def initialize(app, addresses=nil)
       @app = app
-      @ip_addresses = addresses||ENV['WHITELISTED_IPS']||[]
+      env_ips = ENV.include?('WHITELISTED_IPS') ? ENV['WHITELISTED_IPS'].split(',') : []
+      @ip_addresses = addresses || env_ips
     end
 
     def call(env)
@@ -21,5 +22,6 @@ module Rack
       Rails.logger.info "[rack.ipwhitelist] access for remote ip #{address.inspect} #{allowed ? 'granted' : 'denied'}"
       allowed
     end
+
   end
 end
