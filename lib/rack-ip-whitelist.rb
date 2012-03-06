@@ -16,8 +16,9 @@ module Rack
     end
     
     def white_listed?(env)
-      Rails.logger.info "WHITELIST: ENV: #{env["REMOTE_ADDR"].inspect}"
-      ENV.include?('WHITELISTED_IPS') ? @ip_addresses.include?(env["REMOTE_ADDR"]) : true
+      allowed = ENV.include?('WHITELISTED_IPS') ? @ip_addresses.include?(env["REMOTE_ADDR"]) : true
+      Rails.logger.info "[rack.ipwhitelist] access for remote ip #{env["REMOTE_ADDR"].inspect} #{allowed ? 'granted' : 'denied'}"
+      allowed
     end
   end
 end
