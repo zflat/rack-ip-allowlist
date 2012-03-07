@@ -12,7 +12,7 @@ module Rack
       if white_listed?(env)
         @app.call(env)
       else
-        [ 200, {"Content-Type" => "text/html"}, ["<p>You are not authorized to view this site</p>"] ]
+        [ 401, {"Content-Type" => "text/html"}, ["<p>You are not authorized to view this site</p>"] ]
       end
     end
     
