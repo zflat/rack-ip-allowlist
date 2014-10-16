@@ -1,0 +1,27 @@
+require 'spec_helper'
+
+describe IpWhiteList do
+  let(:app){ ->(env) { [200, env, "app"] }}
+
+  context "given no whitelist" do
+    let(:middleware) do
+       IpWhiteList.new(app, [])
+    end
+
+    it "allows any IP" do
+       code, env = middleware.call env_for('http://admin.example.com')
+
+      expect(code).to eq 200
+      expect(env['Location']).to eq 'https://admin.example.com/'
+    end
+
+  end
+    
+  context "given an array of addresses" do
+    let(:middleware) do
+       IpWhiteList.new(app, %w(127.0.0.1 55.44.11.22) )
+    end
+
+  end
+
+end
