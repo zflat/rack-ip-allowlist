@@ -4,9 +4,11 @@ require 'rack-ip-whitelist/netaddr_list'
 module Rack
   class IpWhitelist
     
-    def initialize(app, addresses=nil)
+    def initialize(app, optns={})
+      addresses = optns[:ips]
+      hostnames = optns[:hostnames]
       @app = app
-      @ips = NetaddrList.parse addresses || ENV['WHITELISTED_IPS']
+      @ips = NetaddrList.parse addresses || ENV['WHITELISTED_IPS'], hostnames || ENV['WHITELISTED_HOSTNAMES']
       Rails.logger.info "[rack.ipwhitelist] whitelist: #{@ips.inspect}" if defined? Rails
     end
 

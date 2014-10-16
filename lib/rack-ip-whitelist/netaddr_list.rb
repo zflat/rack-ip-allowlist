@@ -1,17 +1,36 @@
 require "netaddr"
+require 'resolv'
 
 class NetaddrList
+
+  HOSTNAME_RESOLV_ATTEMPTS = 10
   
-  def self.parse addresses
+  def self.parse addresses, hostnames=nil
     addresses ||= ''
-    new addresses.split(',').collect {|address|
+    hostnames ||= ''
+    ip_list = addresses.split(',').collect {|address|
       if address['..'].nil?
         NetAddr.wildcard(address)
       else
         ips = address.split '..'
         NetAddr.wildcard(ips.first)..NetAddr.wildcard(ips.last)
       end
+    } | hostnames.split(',').collect {|hostname|
+      h = nil
+      (1..HOSTNAME_RESOLV_ATTEMPTS).each do |attempt|
+        begin
+          h = ::Resolv.getaddress(hostname) 
+          break if h
+          sleep(0.05)
+        rescue => e
+          message = "[rack.ipwhitelist.netaddr_list]: Could not resolve address for #{hostname} on attempt #{attempt}"
+          Rails.logger.warn message  if defined? Rails
+          puts e.message
+        end
+      end # (1..HOSTNAME_RESOLV_ATTEMPTS).each
+      NetAddr.wildcard(h)
     }
+    self.new ip_list
   end
   
   def initialize cidrs_list

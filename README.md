@@ -7,9 +7,11 @@ Outside these addresses, vistors are shown 403 Forbidden page.
 
 ### Features
 
+* Whitelist hostnames or ip addresses
 * Multiple options for providing the whitelist (see usage)
 * Uses HTTP_X_FORWARDED_FOR as well as backing up with REMOTE_ADDR
 * Supports wildcards, single ips and ranges
+* 403 error document read from rails /public directory when used in rails
 
 
 ### Usage
@@ -23,11 +25,19 @@ in Gemfile
 in config/application.rb
 
       # array of whitelisted addresses
-      config.middleware.use Rack::IpWhitelist, '55.44.22.11,55.44.11.22'
+      config.middleware.use Rack::IpWhitelist, :ips=>'55.44.22.11,55.44.11.22'
       
-      # whitelist specified in the env
+      # array of whitelisted hostnames
+      config.middleware.use Rack::IpWhitelist, :hostnames=>'domain1.com,domain2.com'
+      
+      # whitelist ips specified in the env
       ENV['WHITELISTED_IPS']
       config.middleware.use Rack::IpWhitelist
+
+      # whitelist hostnames specified in the env
+      ENV['WHITELISTED_HOSTNAMES']
+      config.middleware.use Rack::IpWhitelist
+
 
 ## Testing
 
