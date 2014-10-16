@@ -14,7 +14,7 @@ module Rack
       if white_listed?(env)
         @app.call(env)
       else
-        body = defined?(Rails) ?  File.open(File.join(Rails.root, 'public', '403.html'), 'r'): '<p>You are not authorized to view this site</p>'
+        body = defined?(Rails) ?  ::File.open(File.join(Rails.root, 'public', '403.html'), 'r'): '<p>You are not authorized to view this site</p>'
         [ 403, {"Content-Type" => "text/html"}, body]
       end
     end
