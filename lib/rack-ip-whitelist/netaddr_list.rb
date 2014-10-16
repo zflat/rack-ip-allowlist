@@ -2,7 +2,8 @@ require "netaddr"
 
 class NetaddrList
   
-  def self.parse addresses=""
+  def self.parse addresses
+    addresses ||= ''
     new addresses.split(',').collect {|address|
       if address['..'].nil?
         NetAddr.wildcard(address)
