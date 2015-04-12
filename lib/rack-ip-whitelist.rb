@@ -17,6 +17,7 @@ module Rack
         @app.call(env)
       else
         body = defined?(Rails) ?  ::File.open(::File.join(Rails.root, 'public', '403.html'), 'r'): '<p>You are not authorized to view this site</p>'
+        Rails.logger.info "[rack.ipwhitelist] sending 403 body" if defined?(Rails)
         [ 403, {"Content-Type" => "text/html"}, body]
       end
     end

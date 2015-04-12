@@ -28,8 +28,8 @@ class NetaddrList
           puts e.message
         end
       end # (1..HOSTNAME_RESOLV_ATTEMPTS).each
-      NetAddr.wildcard(h)
-    }
+      if h; NetAddr.wildcard(h) else nil end
+    }.select{|entry| !entry.nil?}
     self.new ip_list
   end
   

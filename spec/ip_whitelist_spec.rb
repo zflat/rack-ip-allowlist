@@ -35,6 +35,25 @@ module Rack
       end
     end # context "With wildcard ip addresses set in ENV"
 
+    context "With a fake hostname set in ENV" do
+      let(:middleware) do
+        IpWhitelist.new(app)
+      end
+
+      before :each do
+        ENV['WHITELISTED_HOSTNAMES'] = SecureRandom.hex(22)
+      end
+
+      after :each do
+        ENV['WHITELISTED_HOSTNAMES'] = nil
+      end
+
+      it "blocks ip 127.0.0.1" do
+        code, env = middleware.call env_for('http://admin.example.com', 'REMOTE_ADDR'=>'127.0.0.1')
+        expect(code).to eq 403
+      end
+    end
+    
     context "With 'localhost' hostname set in ENV" do
       let(:middleware) do
         IpWhitelist.new(app)
