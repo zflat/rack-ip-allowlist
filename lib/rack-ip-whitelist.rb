@@ -23,8 +23,11 @@ module Rack
     end
     
     def white_listed?(env)
-      address = env["HTTP_X_FORWARDED_FOR"] || env["REMOTE_ADDR"]
-      allowed = @ips.contains? address
+      # removed x-forwarded-for based on the need to filter for trusted proxies
+      # see http://blog.gingerlime.com/2012/rails-ip-spoofing-vulnerabilities-and-protection
+      # https://github.com/steveklabnik/rails/blob/75dcdbc84e53cd824c4f1c3e4cb82c40f27010c8/actionpack/lib/action_dispatch/middleware/remote_ip.rb
+      address = env["REMOTE_ADDR"]
+      allowed = !(address.nil? || address.length<1) && @ips.contains? address
       Rails.logger.info "[rack.ipwhitelist] access for remote ip #{address.inspect} #{allowed ? 'granted' : 'denied'}" if defined?(Rails)
       allowed
     end

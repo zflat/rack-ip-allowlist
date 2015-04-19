@@ -39,6 +39,14 @@ in config/application.rb
       config.middleware.use Rack::IpWhitelist
 
 
+#### TODO: With a proxy
+
+Not yet implemented.
+
+    # Specify trusted proxy IPs as a comma separated list
+    ENV['WHITELISTED_TRUSTED_PROXY_IPS']
+
+
 ## Testing
 
 Run tests with colored and documented format:
