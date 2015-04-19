@@ -38,7 +38,7 @@ class NetaddrList
   end
   
   def contains? ip
-    !@cirds_list.find do |item|
+    ip && ip.length>0 && !@cirds_list.find do |item|
       if item.is_a? Range
         item.include? ip
       elsif item.is_a? NetAddr::CIDR
