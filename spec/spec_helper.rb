@@ -2,7 +2,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'rspec'
 require 'rack'
-require 'rack-ip-whitelist'
+require 'rack-ip-allowlist'
 
 def env_for url, opts={}
   Rack::MockRequest.env_for(url, opts)

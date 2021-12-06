@@ -1,14 +1,14 @@
-# IP Whitelist Middleware
+# IP Allowlist Middleware
 
 ## About
 
-Rack Middleware for websites that need to contain access to a group of ip addresses (a whitelist). 
+Rack Middleware for websites that need to contain access to a group of ip addresses (a allowlist). 
 Outside these addresses, vistors are shown 403 Forbidden page.
 
 ### Features
 
-* Whitelist hostnames or ip addresses
-* Multiple options for providing the whitelist (see usage)
+* Allowlist hostnames or ip addresses
+* Multiple options for providing the allowlist (see usage)
 * Uses HTTP_X_FORWARDED_FOR as well as backing up with REMOTE_ADDR
 * Supports wildcards, single ips and ranges
 * 403 error document read from rails /public directory when used in rails
@@ -20,23 +20,23 @@ Outside these addresses, vistors are shown 403 Forbidden page.
 
 in Gemfile
 
-      gem 'rack-ip-whitelist'
+      gem 'rack-ip-allowlist'
 
 in config/application.rb
 
-      # array of whitelisted addresses
-      config.middleware.use Rack::IpWhitelist, :ips=>'55.44.22.11,55.44.11.22'
+      # array of allowlisted addresses
+      config.middleware.use Rack::IpAllowlist, :ips=>'55.44.22.11,55.44.11.22'
       
-      # array of whitelisted hostnames
-      config.middleware.use Rack::IpWhitelist, :hostnames=>'domain1.com,domain2.com'
+      # array of allowlisted hostnames
+      config.middleware.use Rack::IpAllowlist, :hostnames=>'domain1.com,domain2.com'
       
-      # whitelist ips specified in the env
-      ENV['WHITELISTED_IPS']
-      config.middleware.use Rack::IpWhitelist
+      # allowlist ips specified in the env
+      ENV['ALLOWLISTED_IPS']
+      config.middleware.use Rack::IpAllowlist
 
-      # whitelist hostnames specified in the env
-      ENV['WHITELISTED_HOSTNAMES']
-      config.middleware.use Rack::IpWhitelist
+      # allowlist hostnames specified in the env
+      ENV['ALLOWLISTED_HOSTNAMES']
+      config.middleware.use Rack::IpAllowlist
 
 
 #### TODO: With a proxy
@@ -44,7 +44,7 @@ in config/application.rb
 Not yet implemented.
 
     # Specify trusted proxy IPs as a comma separated list
-    ENV['WHITELISTED_TRUSTED_PROXY_IPS']
+    ENV['ALLOWLISTED_TRUSTED_PROXY_IPS']
 
 
 ## Testing

@@ -1,6 +1,6 @@
 module Rack
   module Ip
-    module Whitelist
+    module Allowlist
       VERSION = "0.0.5"
     end
   end

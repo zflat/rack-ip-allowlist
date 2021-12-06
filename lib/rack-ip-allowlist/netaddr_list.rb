@@ -23,7 +23,7 @@ class NetaddrList
           break if h
           sleep(0.05)
         rescue => e
-          message = "[rack.ipwhitelist.netaddr_list]: Could not resolve address for #{hostname} on attempt #{attempt}"
+          message = "[rack.ipallowlist.netaddr_list]: Could not resolve address for #{hostname} on attempt #{attempt}"
           Rails.logger.warn message  if defined? Rails
           puts e.message
         end

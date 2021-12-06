@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 module Rack
-  describe IpWhitelist do
+  describe IpAllowlist do
     let(:app){ ->(env) { [200, env, "app"] }}
     
-    context "Given no whitelist info" do
+    context "Given no allowlist info" do
       let(:middleware) do
-        IpWhitelist.new(app)
+        IpAllowlist.new(app)
       end
       
       it "is unauthorized" do
@@ -14,19 +14,19 @@ module Rack
         expect(code).to eq 403
       end
       
-    end # context "no whitelist info" do
+    end # context "no allowlist info" do
 
     context "With wildcard ip addresses set in ENV" do
       let(:middleware) do
-        IpWhitelist.new(app)
+        IpAllowlist.new(app)
       end
 
       before :each do
-        ENV['WHITELISTED_IPS'] = '*.*.*.*'
+        ENV['ALLOWLISTED_IPS'] = '*.*.*.*'
       end
 
       after :each do
-        ENV['WHITELISTED_IPS'] = nil
+        ENV['ALLOWLISTED_IPS'] = nil
       end
 
       it "is authorized" do
@@ -37,15 +37,15 @@ module Rack
 
     context "With a fake hostname set in ENV" do
       let(:middleware) do
-        IpWhitelist.new(app)
+        IpAllowlist.new(app)
       end
 
       before :each do
-        ENV['WHITELISTED_HOSTNAMES'] = SecureRandom.hex(22)
+        ENV['ALLOWLISTED_HOSTNAMES'] = SecureRandom.hex(22)
       end
 
       after :each do
-        ENV['WHITELISTED_HOSTNAMES'] = nil
+        ENV['ALLOWLISTED_HOSTNAMES'] = nil
       end
 
       it "blocks ip 127.0.0.1" do
@@ -56,15 +56,15 @@ module Rack
     
     context "With 'localhost' hostname set in ENV" do
       let(:middleware) do
-        IpWhitelist.new(app)
+        IpAllowlist.new(app)
       end
 
       before :each do
-        ENV['WHITELISTED_HOSTNAMES'] = 'localhost'
+        ENV['ALLOWLISTED_HOSTNAMES'] = 'localhost'
       end
 
       after :each do
-        ENV['WHITELISTED_HOSTNAMES'] = nil
+        ENV['ALLOWLISTED_HOSTNAMES'] = nil
       end
 
       it "authorizes ip 127.0.0.1" do
@@ -78,7 +78,7 @@ module Rack
       let(:ip_list){ "#{listed_ip},55.44.11.22"}
 
       let(:middleware) do
-        IpWhitelist.new(app, :ips=>ip_list)
+        IpAllowlist.new(app, :ips=>ip_list)
       end
       
       context "A request from listed ip" do
@@ -100,15 +100,15 @@ module Rack
     context "Given 'localhost' and 'rubygems.org' hostname" do
       let(:hostnames_list){'localhost,rubygems.org'}
       let(:middleware) do
-        IpWhitelist.new(app, :hostnames=>hostnames_list)
+        IpAllowlist.new(app, :hostnames=>hostnames_list)
       end
 
       before :each do
-        ENV['WHITELISTED_HOSTNAMES'] = 'localhost'
+        ENV['ALLOWLISTED_HOSTNAMES'] = 'localhost'
       end
 
       after :each do
-        ENV['WHITELISTED_HOSTNAMES'] = nil
+        ENV['ALLOWLISTED_HOSTNAMES'] = nil
       end
 
       it "authorizes ip 127.0.0.1" do
@@ -118,5 +118,5 @@ module Rack
     end
     
     
-  end # describe IpWhitelist
+  end # describe IpAllowlist
 end # module Rack
